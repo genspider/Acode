@@ -90,14 +90,7 @@ function getFixedButtons() {
 	);
 }
 
-function getFixedButtonsByRow() {
-	const fixedButtons = getFixedButtons();
-	const row1 = fixedButtons.slice(0, 3);
-	const row2 = fixedButtons.slice(3, 6);
-	return [row1, row2];
-}
-
-function generateFooter() {
+export function generateFooter() {
 	const [row1, row2] = getFixedButtonsByRow();
 	return (
 		<footer id="quick-tools" tabIndex={-1}>
