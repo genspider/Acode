@@ -20,6 +20,12 @@
     overflow-y: auto;
   }
 
+  // Override main.scss horizontal scroll
+  .scrollable-area .button-container {
+    overflow-x: visible;
+    flex-wrap: wrap;
+  }
+
   .fixed-row {
     display: flex;
     min-height: 40px;
