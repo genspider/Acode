@@ -162,8 +162,8 @@ quickTools.$input.addEventListener("keydown", (e) => {
 appSettings.on("update:quicktoolsItems:after", () => {
 	setTimeout(() => {
 		if (actionStack.has("search-bar")) return;
-		const { $footer, $row1, $row2 } = quickTools;
-		$footer.querySelector(".scrollable-area").content = [$row1, $row2];
+		const { $footer, $scrollableButtons } = quickTools;
+		$footer.querySelector(".scrollable-area").content = [$scrollableButtons];
 	}, 100);
 });
 

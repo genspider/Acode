@@ -66,10 +66,7 @@ class QuickToolsManager {
 
 		const activeGrid = <div className="quicktools-grid active-grid"></div>;
 
-		const totalSlots =
-			settings.QUICKTOOLS_ROWS *
-			settings.QUICKTOOLS_GROUPS *
-			settings.QUICKTOOLS_GROUP_CAPACITY;
+		const totalSlots = settings.value.quicktoolsItems.length;
 
 		for (let i = 0; i < totalSlots; i++) {
 			const itemIndex = settings.value.quicktoolsItems[i];
