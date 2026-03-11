@@ -75,6 +75,14 @@ class QuickToolsManager {
 			activeGrid.appendChild(el);
 		}
 
+		const addButton = (
+			<div className="tool-item add-item" data-type="add">
+				<span className="icon add">+</span>
+			</div>
+		);
+		addButton.onclick = () => this.handleAddItem();
+		activeGrid.appendChild(addButton);
+
 		activeSection.appendChild(activeGrid);
 		this.container.appendChild(activeSection);
 
@@ -419,6 +427,23 @@ class QuickToolsManager {
 		settings.value.quicktoolsItems[slotIndex] = newItemId;
 		settings.update();
 		this.render();
+	}
+
+	async handleAddItem() {
+		const selectItems = items.map((item, idx) => ({
+			value: idx,
+			text: description(item.id) || item.id,
+			icon: item.icon,
+			letters: item.letters,
+		}));
+
+		const selectedValue = await select(strings["select tool"], selectItems);
+
+		if (selectedValue !== undefined) {
+			settings.value.quicktoolsItems.push(Number.parseInt(selectedValue, 10));
+			settings.update();
+			this.render();
+		}
 	}
 
 	async handleClick(el) {

@@ -167,6 +167,13 @@ appSettings.on("update:quicktoolsItems:after", () => {
 	}, 100);
 });
 
+appSettings.on("update:quicktoolsFixedItems:after", () => {
+	setTimeout(() => {
+		if (actionStack.has("search-bar")) return;
+		quickTools.reloadFixedArea?.();
+	}, 100);
+});
+
 let historyNavigationInitialized = false;
 // Initialize history navigation
 function setupHistoryNavigation() {

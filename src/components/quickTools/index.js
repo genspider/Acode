@@ -5,12 +5,15 @@ import {
 	$footer,
 	$input,
 	$toggler,
+	generateFooter,
 	ScrollableButtons,
 	SearchRow1,
 	SearchRow2,
 } from "./footer";
 
 let $scrollableButtons;
+let $searchRow1;
+let $searchRow2;
 
 const $searchInput = Ref();
 const $replaceInput = Ref();
@@ -30,6 +33,16 @@ export default {
 		});
 
 		return $scrollableButtons;
+	},
+	get $fixedArea() {
+		return $footer.querySelector(".fixed-area");
+	},
+	reloadFixedArea() {
+		const newFooter = generateFooter();
+		const oldFooter = $footer;
+		oldFooter
+			.querySelector(".fixed-area")
+			.replaceWith(newFooter.querySelector(".fixed-area"));
 	},
 	get $searchRow1() {
 		if ($searchRow1) return $searchRow1;
