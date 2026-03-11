@@ -2,39 +2,39 @@ name: community-release-notifier
 
 on:
   release:
-    types: [ released ]
+    types: [released]
   workflow_call:
     inputs:
       tag_name:
         required: true
         description: "Release tag_name"
-        type: 'string'
+        type: "string"
       url:
         required: true
         description: "release URL"
-        type: 'string'
+        type: "string"
       body:
         required: true
         description: "Release Body"
-        type: 'string'
-        default: ''
+        type: "string"
+        default: ""
     secrets:
       DISCORD_WEBHOOK_RELEASE_NOTES:
-        description: 'Discord Webhook for Notifying Releases to Discord'
+        description: "Discord Webhook for Notifying Releases to Discord"
         required: true
       TELEGRAM_BOT_TOKEN:
-        description: 'Telegram Bot Token'
+        description: "Telegram Bot Token"
         required: true
       TELEGRAM_CHAT_ID:
-        description: 'Telegram Chat ID (group/channel/supergroup)'
+        description: "Telegram Chat ID (group/channel/supergroup)"
         required: true
       TELEGRAM_MESSAGE_THREAD_ID:
-        description: 'Topic / message_thread_id for Telegram forum/topic'
+        description: "Topic / message_thread_id for Telegram forum/topic"
         required: true
 
 jobs:
   notify:
-    if: github.repository_owner == 'Acode-Foundation'
+    if: github.repository_owner == 'Acode-Foundation' || github.repository_owner == 'genspider'
     runs-on: ubuntu-latest
     steps:
       - name: Prepare release variables
@@ -46,10 +46,10 @@ jobs:
         run: |
           TAG="$INPUT_TAG"
           URL="$INPUT_URL"
-          
+
           # Generate a random delimiter (hex string, safe and collision-resistant)
           DELIMITER=$(openssl rand -hex 16 || head -c 16 /dev/urandom | xxd -p -c 16)
-          
+
           # Escape problematic characters for MarkdownV2 (very conservative escaping)
           # We escape: _ * [ ] ( ) ~ ` > # + - = | { } . ! \
           BODY_SAFE=$(printf '%s' "$INPUT_BODY" | \
@@ -88,7 +88,7 @@ jobs:
       # ────────────────────────────────────────────────
       - name: Truncate message for Discord
         id: truncate-discord
-        uses: 2428392/gh-truncate-string-action@b3ff790d21cf42af3ca7579146eedb93c8fb0757  # v1.4.1
+        uses: 2428392/gh-truncate-string-action@b3ff790d21cf42af3ca7579146eedb93c8fb0757 # v1.4.1
         with:
           maxLength: 2000
           stringToTruncate: |
@@ -100,7 +100,7 @@ jobs:
       # Discord notification
       # ────────────────────────────────────────────────
       - name: Discord Webhook (Publishing)
-        uses: tsickert/discord-webhook@c840d45a03a323fbc3f7507ac7769dbd91bfb164  # v5.3.0
+        uses: tsickert/discord-webhook@c840d45a03a323fbc3f7507ac7769dbd91bfb164 # v5.3.0
         with:
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_RELEASE_NOTES }}
           content: ${{ steps.truncate-discord.outputs.string }}
@@ -111,7 +111,7 @@ jobs:
       # ────────────────────────────────────────────────
       - name: Send to Telegram
         #if: ${{ secrets.TELEGRAM_BOT_TOKEN != '' && secrets.TELEGRAM_CHAT_ID != '' && secrets.TELEGRAM_MESSAGE_THREAD_ID != '' }}
-        uses: Salmansha08/telegram-github-action@17c9ce6b4210d2659dca29d34028b02fa29d70ad  # or newer tag if available
+        uses: Salmansha08/telegram-github-action@17c9ce6b4210d2659dca29d34028b02fa29d70ad # or newer tag if available
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
