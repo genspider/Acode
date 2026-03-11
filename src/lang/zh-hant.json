@@ -490,6 +490,8 @@
 	"error details": "詳細錯誤資訊",
 	"active tools": "已啟用工具",
 	"available tools": "可用的工具",
+	"fixed area": "固定區域",
+	"select tool": "選擇工具",
 	"recent": "最近檔案",
 	"command palette": "打開命令面板",
 	"change theme": "更改主題",

@@ -1,6 +1,23 @@
-@use '../../styles/mixins.scss';
+@use "../../styles/mixins.scss";
 
 #quick-tools {
+  display: flex;
+
+  .fixed-area {
+    width: auto;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .scrollable-area {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .fixed-row {
+    display: flex;
+  }
+
   .icon.click {
     @include mixins.active-icon;
     transition: all 0.3s ease-in-out;

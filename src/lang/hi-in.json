@@ -491,6 +491,8 @@
 	"error details": "Error details",
 	"active tools": "Active tools",
 	"available tools": "Available tools",
+	"fixed area": "Fixed area",
+	"select tool": "Select tool",
 	"recent": "Recent Files",
 	"command palette": "Open Command Palette",
 	"change theme": "Change Theme",

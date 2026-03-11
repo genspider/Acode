@@ -65,7 +65,23 @@ export const SearchRow2 = ({ inputRef, posRef, totalRef }) => (
 );
 
 /**@type {HTMLElement} */
-export const $footer = <footer id="quick-tools" tabIndex={-1}></footer>;
+export const $footer = (
+	<footer id="quick-tools" tabIndex={-1}>
+		<div className="fixed-area">
+			<div className="fixed-row">
+				<RowItem {...items[8]} />
+				<RowItem {...items[19]} />
+				<RowItem {...items[1]} />
+			</div>
+			<div className="fixed-row">
+				<RowItem {...items[17]} />
+				<RowItem {...items[20]} />
+				<RowItem {...items[18]} />
+			</div>
+		</div>
+		<div className="scrollable-area"></div>
+	</footer>
+);
 
 /**@type {HTMLElement} */
 export const $toggler = (
