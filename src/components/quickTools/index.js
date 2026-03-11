@@ -20,17 +20,18 @@ const $replaceInput = Ref();
 const $searchPos = Ref();
 const $searchTotal = Ref();
 
+settings.on("update:quicktoolsItems:after", () => {
+	$scrollableButtons = <ScrollableButtons />;
+});
+
 export default {
 	get $footer() {
 		return $footer;
 	},
 	get $scrollableButtons() {
-		if ($scrollableButtons) return $scrollableButtons;
-		$scrollableButtons = <ScrollableButtons />;
-
-		settings.on("update:quicktoolsItems:after", () => {
+		if (!$scrollableButtons) {
 			$scrollableButtons = <ScrollableButtons />;
-		});
+		}
 
 		return $scrollableButtons;
 	},

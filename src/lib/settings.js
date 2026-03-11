@@ -1,5 +1,4 @@
 import fsOperation from "fileSystem";
-import quickToolsItems from "components/quickTools/items";
 import ThemeBuilder from "theme/builder";
 import themes from "theme/list";
 import { getSystemEditorTheme } from "theme/preInstalled";
@@ -95,8 +94,9 @@ class Settings {
 		"right-arrow-key",
 	];
 	get QUICKTOOLS_DEFAULT_FIXED_ITEM_INDICES() {
+		const { default: items } = require("components/quickTools/items");
 		return this.QUICKTOOLS_DEFAULT_FIXED_ITEM_IDS.map((id) =>
-			quickToolsItems.findIndex((item) => item.id === id),
+			items.findIndex((item) => item.id === id),
 		);
 	}
 	#QUICKTOOLS_SIZE = this.QUICKTOOLS_GROUP_CAPACITY * this.QUICKTOOLS_GROUPS;
