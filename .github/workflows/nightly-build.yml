@@ -9,6 +9,9 @@ on:
   push:
     tags:
       - nightly
+    branches:
+      - main
+      - master
   workflow_call:
     inputs:
       is_PR:
