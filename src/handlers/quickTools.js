@@ -163,8 +163,7 @@ appSettings.on("update:quicktoolsItems:after", () => {
 	setTimeout(() => {
 		if (actionStack.has("search-bar")) return;
 		const { $footer, $row1, $row2 } = quickTools;
-		const height = getFooterHeight();
-		$footer.content = [$row1, $row2].slice(0, height);
+		$footer.querySelector(".scrollable-area").content = [$row1, $row2];
 	}, 100);
 });
 
@@ -414,11 +413,12 @@ function toggleSearch() {
 
 	if (!$footer.contains($searchRow1)) {
 		const { className } = quickTools.$toggler;
-		const $content = [...$footer.children];
+		const $scrollableArea = $footer.querySelector(".scrollable-area");
+		const $content = [...$scrollableArea.children];
 		const footerHeight = getFooterHeight();
 
 		$toggler.className = "floating icon clearclose";
-		$footer.content = [$searchRow1, $searchRow2];
+		$scrollableArea.content = [$searchRow1, $searchRow2];
 		setRefValue($searchInput, selectedText || "");
 
 		$searchInput.oninput = function () {
@@ -444,7 +444,7 @@ function toggleSearch() {
 			id: "search-bar",
 			action: () => {
 				removeSearch();
-				$footer.content = $content;
+				$footer.querySelector(".scrollable-area").content = $content;
 				$toggler.className = className;
 				setFooterHeight(footerHeight);
 			},
@@ -508,7 +508,7 @@ function setHeight(height = 1, save = true) {
 
 	if (height >= 1) {
 		$row1.style.scrollBehavior = "unset";
-		$footer.append($row1);
+		$footer.querySelector(".scrollable-area").append($row1);
 		$row1.scrollLeft = Number.parseInt(
 			localStorage.quickToolRow1ScrollLeft,
 			10,
@@ -518,7 +518,7 @@ function setHeight(height = 1, save = true) {
 
 	if (height >= 1) {
 		$row2.style.scrollBehavior = "unset";
-		$footer.append($row2);
+		$footer.querySelector(".scrollable-area").append($row2);
 		$row2.scrollLeft = Number.parseInt(
 			localStorage.quickToolRow2ScrollLeft,
 			10,

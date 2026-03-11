@@ -1,6 +1,7 @@
 import "./style.scss";
 import Page from "components/page";
 import items, { description } from "components/quickTools/items";
+import select from "dialogs/select";
 import actionStack from "lib/actionStack";
 import settings from "lib/settings";
 import helpers from "utils/helpers";
@@ -80,6 +81,25 @@ class QuickToolsManager {
 		activeSection.appendChild(activeGrid);
 		this.container.appendChild(activeSection);
 
+		// --- Fixed Area Section ---
+		const fixedSection = <div className="section fixed-area"></div>;
+		fixedSection.appendChild(
+			<div className="section-title">{strings["fixed area"]}</div>,
+		);
+
+		const fixedGrid = <div className="quicktools-grid fixed-grid"></div>;
+
+		const fixedItems = settings.value.quicktoolsFixedItems;
+		for (let i = 0; i < settings.QUICKTOOLS_FIXED_ITEM_COUNT; i++) {
+			const itemIndex = fixedItems[i];
+			const itemDef = items[itemIndex];
+			const el = this.createFixedItemElement(itemDef, i);
+			fixedGrid.appendChild(el);
+		}
+
+		fixedSection.appendChild(fixedGrid);
+		this.container.appendChild(fixedSection);
+
 		// --- Available Tools Section ---
 		const availableSection = <div className="section available-tools"></div>;
 		availableSection.appendChild(
@@ -149,6 +169,48 @@ class QuickToolsManager {
 			</div>
 		);
 		return el;
+	}
+
+	createFixedItemElement(itemDef, index) {
+		if (!itemDef)
+			return <div className="tool-item empty" data-fixed-index={index}></div>;
+
+		const hasIcon = itemDef.icon && itemDef.icon !== "letters";
+
+		const el = (
+			<div
+				className={`tool-item fixed-item ${hasIcon ? "has-icon" : "has-letters"}`}
+				data-fixed-index={index}
+				data-letters={itemDef.letters || ""}
+			>
+				{hasIcon ? <span className={`icon ${itemDef.icon}`}></span> : null}
+			</div>
+		);
+
+		el.onclick = () => this.handleFixedItemClick(index, itemDef);
+		return el;
+	}
+
+	async handleFixedItemClick(slotIndex, currentItem) {
+		const selectItems = items.map((item, idx) => ({
+			value: idx,
+			text: description(item.id) || item.id,
+			icon: item.icon,
+			letters: item.letters,
+		}));
+
+		const selectedValue = await select(strings["select tool"], selectItems, {
+			default: String(settings.value.quicktoolsFixedItems[slotIndex]),
+		});
+
+		if (selectedValue !== undefined) {
+			settings.value.quicktoolsFixedItems[slotIndex] = Number.parseInt(
+				selectedValue,
+				10,
+			);
+			settings.update();
+			this.render();
+		}
 	}
 
 	bindEvents() {

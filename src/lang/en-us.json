@@ -500,6 +500,8 @@
 	"developer mode disabled": "Developer mode disabled",
 	"copy relative path": "Copy Relative Path",
 	"available tools": "Available tools",
+	"fixed area": "Fixed area",
+	"select tool": "Select tool",
 	"shortcut request sent": "Shortcut request opened. Tap Add to finish.",
 	"add to home screen": "Add to home screen",
 	"pin shortcuts not supported": "Home screen shortcuts are not supported on this device.",

@@ -64,8 +64,52 @@ export const SearchRow2 = ({ inputRef, posRef, totalRef }) => (
 	</div>
 );
 
+/**
+ * Get fixed button indices from settings
+ * @returns {number[]} Array of item indices for fixed buttons
+ */
+function getFixedButtons() {
+	return settings.value.quicktoolsFixedItems ?? [8, 19, 1, 17, 20, 18];
+}
+
+/**
+ * Get fixed buttons grouped by rows (3 per row)
+ * @returns {number[][]} Array of rows, each containing 3 item indices
+ */
+function getFixedButtonsByRow() {
+	const fixedButtons = getFixedButtons();
+	const row1 = fixedButtons.slice(0, 3);
+	const row2 = fixedButtons.slice(3, 6);
+	return [row1, row2];
+}
+
+/**
+ * Generate footer element with fixed buttons from settings
+ * @returns {HTMLElement}
+ */
+function generateFooter() {
+	const [row1, row2] = getFixedButtonsByRow();
+	return (
+		<footer id="quick-tools" tabIndex={-1}>
+			<div className="fixed-area">
+				<div className="fixed-row">
+					{row1.map((itemIndex) => (
+						<RowItem {...items[itemIndex]} />
+					))}
+				</div>
+				<div className="fixed-row">
+					{row2.map((itemIndex) => (
+						<RowItem {...items[itemIndex]} />
+					))}
+				</div>
+			</div>
+			<div className="scrollable-area"></div>
+		</footer>
+	);
+}
+
 /**@type {HTMLElement} */
-export const $footer = <footer id="quick-tools" tabIndex={-1}></footer>;
+export const $footer = generateFooter();
 
 /**@type {HTMLElement} */
 export const $toggler = (

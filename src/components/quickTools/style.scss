@@ -1,10 +1,67 @@
-@use '../../styles/mixins.scss';
+@use "../../styles/mixins.scss";
 
 #quick-tools {
+  display: flex;
+  min-height: 40px;
+  background-color: var(--primary-color);
+  color: var(--primary-text-color);
+  user-select: none;
+
+  .fixed-area {
+    width: auto;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .scrollable-area {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  // Override main.scss horizontal scroll
+  .scrollable-area .button-container {
+    overflow-x: visible;
+    flex-wrap: wrap;
+  }
+
+  .fixed-row {
+    display: flex;
+    min-height: 40px;
+  }
+
   .icon.click {
     @include mixins.active-icon;
     transition: all 0.3s ease-in-out;
     transform: scale(1.2);
+  }
+
+  button {
+    min-width: 40px;
+    min-height: 40px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1em;
+
+    &:active {
+      background-color: var(--button-active-color);
+    }
+  }
+
+  .icon {
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
   }
 
   &[data-alt="true"] {
