@@ -5,11 +5,30 @@
 import settings from "lib/settings";
 import items, { ref } from "./items";
 
-/**
- * Create a row with common buttons
- * @param {object} param0 Attributes
- * @param {number} [param0.row] Row number
- */
+export const ScrollableButtons = () => {
+	const quicktoolsItems = settings.value.quicktoolsItems || [];
+	const columnsPerRow = settings.QUICKTOOLS_GROUP_CAPACITY;
+	const totalRows = Math.ceil(quicktoolsItems.length / columnsPerRow);
+
+	const rows = [];
+	for (let row = 0; row < totalRows; row++) {
+		const rowItems = [];
+		for (let col = 0; col < columnsPerRow; col++) {
+			const index = row * columnsPerRow + col;
+			const itemIndex = quicktoolsItems[index];
+			const item = items[itemIndex];
+			rowItems.push(<RowItem {...item} index={index} />);
+		}
+		rows.push(
+			<div className="button-container">
+				<div className="section">{rowItems}</div>
+			</div>,
+		);
+	}
+
+	return <div className="scrollable-rows">{rows}</div>;
+};
+
 export const Row = ({ row }) => {
 	const startIndex =
 		(row - 1) * settings.QUICKTOOLS_GROUP_CAPACITY * settings.QUICKTOOLS_GROUPS;
@@ -64,26 +83,45 @@ export const SearchRow2 = ({ inputRef, posRef, totalRef }) => (
 	</div>
 );
 
-/**@type {HTMLElement} */
-export const $footer = (
-	<footer id="quick-tools" tabIndex={-1}>
-		<div className="fixed-area">
-			<div className="fixed-row">
-				<RowItem {...items[8]} />
-				<RowItem {...items[19]} />
-				<RowItem {...items[1]} />
-			</div>
-			<div className="fixed-row">
-				<RowItem {...items[17]} />
-				<RowItem {...items[20]} />
-				<RowItem {...items[18]} />
-			</div>
-		</div>
-		<div className="scrollable-area"></div>
-	</footer>
-);
+function getFixedButtons() {
+	return (
+		settings.value.quicktoolsFixedItems ??
+		settings.QUICKTOOLS_DEFAULT_FIXED_ITEM_INDICES
+	);
+}
 
-/**@type {HTMLElement} */
+function getFixedButtonsByRow() {
+	const fixedButtons = getFixedButtons();
+	const row1 = fixedButtons.slice(0, 3);
+	const row2 = fixedButtons.slice(3, 6);
+	return [row1, row2];
+}
+
+function generateFooter() {
+	const [row1, row2] = getFixedButtonsByRow();
+	return (
+		<footer id="quick-tools" tabIndex={-1}>
+			<div className="fixed-area">
+				<div className="fixed-row">
+					{row1.map((itemIndex) => (
+						<RowItem {...items[itemIndex]} />
+					))}
+				</div>
+				<div className="fixed-row">
+					{row2.map((itemIndex) => (
+						<RowItem {...items[itemIndex]} />
+					))}
+				</div>
+			</div>
+			<div className="scrollable-area">
+				<ScrollableButtons />
+			</div>
+		</footer>
+	);
+}
+
+export const $footer = generateFooter();
+
 export const $toggler = (
 	<span
 		className="floating icon keyboard_arrow_up"
@@ -91,7 +129,6 @@ export const $toggler = (
 	></span>
 );
 
-/**@type {HTMLTextAreaElement} */
 export const $input = (
 	<textarea
 		autocapitalize="none"
@@ -108,18 +145,6 @@ export const $input = (
 	></textarea>
 );
 
-/**
- *
- * @param {RowItem} param0 Attributes
- * @param {string} param0.id Button id
- * @param {string} param0.icon Icon name
- * @param {string} param0.letters Letters to show on button
- * @param {'insert'|'command'|'key'|'custom'} param0.action Action type
- * @param {string|Function} param0.value Value of button
- * @param {Ref} param0.ref Reference to button
- * @param {boolean} param0.repeat Whether to repeat the action or not
- * @returns {HTMLButtonElement}
- */
 export function RowItem({ id, icon, letters, action, value, ref, repeat }) {
 	const $item = (
 		<button
@@ -141,12 +166,6 @@ export function RowItem({ id, icon, letters, action, value, ref, repeat }) {
 	return $item;
 }
 
-/**
- * Create a list of RowItem components
- * @param {object} param0 Attributes
- * @param {Array<RowItem>} param0.extras Extra buttons
- * @returns {Array<Element>}
- */
 function Extras({ extras }) {
 	const div = <div className="section"></div>;
 	if (Array.isArray(extras)) {
@@ -161,12 +180,3 @@ function Extras({ extras }) {
 	}
 	return div;
 }
-
-/**
- * @typedef {object} RowItem
- * @property {string} icon
- * @property {string} letters
- * @property {'insert'|'command'|'key'|'custom'} action
- * @property {string|Function} value
- * @property {Ref} ref
- */

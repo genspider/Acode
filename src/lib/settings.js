@@ -1,4 +1,5 @@
 import fsOperation from "fileSystem";
+import quickToolsItems from "components/quickTools/items";
 import ThemeBuilder from "theme/builder";
 import themes from "theme/list";
 import { getSystemEditorTheme } from "theme/preInstalled";
@@ -82,14 +83,23 @@ class Settings {
 	];
 	#IS_TABLET = innerWidth > 768;
 
-	QUICKTOOLS_ROWS = 2;
-	QUICKTOOLS_GROUP_CAPACITY = 8;
-	QUICKTOOLS_GROUPS = 2;
+	QUICKTOOLS_GROUP_CAPACITY = 5;
+	QUICKTOOLS_GROUPS = 4;
 	QUICKTOOLS_FIXED_ITEM_COUNT = 6;
-	#QUICKTOOLS_SIZE =
-		this.QUICKTOOLS_GROUP_CAPACITY * // items per group
-		this.QUICKTOOLS_GROUPS * // number of groups
-		this.QUICKTOOLS_ROWS; // number of rows
+	QUICKTOOLS_DEFAULT_FIXED_ITEM_IDS = [
+		"esc-key",
+		"up-arrow-key",
+		"tab-key",
+		"left-arrow-key",
+		"down-arrow-key",
+		"right-arrow-key",
+	];
+	get QUICKTOOLS_DEFAULT_FIXED_ITEM_INDICES() {
+		return this.QUICKTOOLS_DEFAULT_FIXED_ITEM_IDS.map((id) =>
+			quickToolsItems.findIndex((item) => item.id === id),
+		);
+	}
+	#QUICKTOOLS_SIZE = this.QUICKTOOLS_GROUP_CAPACITY * this.QUICKTOOLS_GROUPS;
 
 	QUICKTOOLS_TRIGGER_MODE_TOUCH = "touch";
 	QUICKTOOLS_TRIGGER_MODE_CLICK = "click";
@@ -169,8 +179,10 @@ class Settings {
 			hardWrap: false,
 			useTextareaForIME: false,
 			touchMoveThreshold: Math.round((1 / devicePixelRatio) * 10) / 20,
-			quicktoolsItems: [...Array(this.#QUICKTOOLS_SIZE).keys()],
-			quicktoolsFixedItems: [8, 19, 1, 17, 20, 18],
+			quicktoolsItems: [...Array(this.#QUICKTOOLS_SIZE).keys()].filter(
+				(i) => !this.QUICKTOOLS_DEFAULT_FIXED_ITEM_INDICES.includes(i),
+			),
+			quicktoolsFixedItems: [...this.QUICKTOOLS_DEFAULT_FIXED_ITEM_INDICES],
 			excludeFolders: this.#excludeFolders,
 			defaultFileEncoding: "UTF-8",
 			inlineAutoCompletion: true,

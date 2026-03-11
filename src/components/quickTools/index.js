@@ -5,19 +5,12 @@ import {
 	$footer,
 	$input,
 	$toggler,
-	Row,
+	ScrollableButtons,
 	SearchRow1,
 	SearchRow2,
 } from "./footer";
 
-/**@type {HTMLElement} */
-let $row1;
-/**@type {HTMLElement} */
-let $row2;
-/**@type {HTMLElement} */
-let $searchRow1;
-/**@type {HTMLElement} */
-let $searchRow2;
+let $scrollableButtons;
 
 const $searchInput = Ref();
 const $replaceInput = Ref();
@@ -28,25 +21,15 @@ export default {
 	get $footer() {
 		return $footer;
 	},
-	get $row1() {
-		if ($row1) return $row1;
-		$row1 = <Row row={1} />;
+	get $scrollableButtons() {
+		if ($scrollableButtons) return $scrollableButtons;
+		$scrollableButtons = <ScrollableButtons />;
 
 		settings.on("update:quicktoolsItems:after", () => {
-			$row1 = <Row row={1} />;
+			$scrollableButtons = <ScrollableButtons />;
 		});
 
-		return $row1;
-	},
-	get $row2() {
-		if ($row2) return $row2;
-		$row2 = <Row row={2} />;
-
-		settings.on("update:quicktoolsItems:after", () => {
-			$row2 = <Row row={2} />;
-		});
-
-		return $row2;
+		return $scrollableButtons;
 	},
 	get $searchRow1() {
 		if ($searchRow1) return $searchRow1;
